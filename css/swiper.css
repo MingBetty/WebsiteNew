@@ -1,0 +1,9 @@
+:root{
+	--swiper-theme-color:#AAAAAA
+}
+
+.swiper-pagination-bullet 
+{
+  width: 5px;
+  height: 5px;
+}

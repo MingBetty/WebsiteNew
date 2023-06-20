@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>北投漁村地圖</title>
+  <style>
+    /* 調整彈出視窗的樣式 */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 400px;
+      background-color: #ffffff;
+      border: 2px solid #333333;
+      padding: 20px;
+      display: none;
+      z-index: 9999;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+    }
+
+    /* 彈出視窗的標題樣式 */
+    .popup h2 {
+      margin-top: 0;
+    }
+
+    /* 彈出視窗的圖片樣式 */
+    .popup-image {
+      max-width: 80%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    /* 彈出視窗的圖片樣式 */
+    .popup-image2 {
+      max-width: 60%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    /* 彈出視窗的內容樣式 */
+    .popup-content {
+      line-height: 1.4;
+    }
+
+    /* 關閉按鈕樣式 */
+    .close-button {
+      display: block;
+      margin-top: 20px;
+      background-color: #333333;
+      color: #ffffff;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .close-button:hover {
+      background-color: #555555;
+    }
+
+    /* 彈出視窗按鈕樣式 */
+    .popup-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #333333;
+      color: #ffffff;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .popup-button:hover {
+      background-color: #555555;
+    }
+  </style>
+  <script>
+    // 顯示彈出視窗
+    function showPopup(imageSrc, content) {
+      var popup = document.getElementById("popup");
+      var popupImage = document.getElementById("popup-image");
+      var popupContent = document.getElementById("popup-content");
+
+      popupImage.src = imageSrc;
+      popupContent.innerHTML = content;
+      popup.style.display = "block";
+    }
+
+    // 顯示彈出視窗2
+    function showPopup2(imageSrc, content) {
+      var popup = document.getElementById("popup2");
+      var popupImage = document.getElementById("popup-image2");
+      var popupContent = document.getElementById("popup-content2");
+
+      popupImage.src = imageSrc;
+      popupContent.innerHTML = content;
+      popup.style.display = "block";
+    }
+
+
+    // 關閉彈出視窗
+    function closePopup() {
+      var popup = document.getElementById("popup");
+      popup.style.display = "none";
+    }
+
+    // 關閉彈出視窗
+    function closePopup2() {
+      var popup = document.getElementById("popup2");
+      popup.style.display = "none";
+    }
+
+    function redirectToOtherPage() {
+      window.location.href = "home_page.html"; // 替換為你想要連結到的網頁的URL
+    }
+
+  </script>
+</head>
+
+<body>
+  <h1></h1>
+  <div>
+    <img src="map.jpg" alt="圖片" usemap="#image-map" width="100%" />
+  </div>
+
+  <!-- 定義圖片的映射區域 -->
+  <map name="image-map">
+    <area shape="rect" coords="370,370,420,420"
+      onclick="showPopup('燈塔圖.jpg', '民國72年3月1日正式開燈，為台灣本島最高燈塔，塔身呈八角黑白相間直條紋造形，塔高37.4公尺，光程16.6海浬，光力28,000燭光，明5杪暗5杪。這座燈塔除了提示港口位置外，同時提醒大型船舶勿靠近潮間帶以免擱淺。')"
+      style="background-color: rgb(0, 0, 0);" />
+
+    <area shape="rect" coords="1600,1600,500,500"
+      onclick="showPopup2('樂觀園戲院.jpg', '建於民國十九年，是日據時期中部地區最大的戲院，由已逝鹿港天后宮顧問李丕顯的父親和伯父經營，當時開設碾米廠和雜貨業，商號「李和成」，富甲一方，本想投資製冰廠，但日本政府鼓勵李氏兄弟開設戲院。')"
+      style="background-color: rgb(0, 0, 0);" />
+  </map>
+
+  <!-- 彈出視窗 -->
+  <div id="popup" class="popup">
+    <h2>王功燈塔</h2>
+    <div>
+      <img id="popup-image" class="popup-image" src="" alt="彈出視窗圖片" />
+    </div>
+    <p id="popup-content"></p>
+    <button class="close-button" onclick="closePopup()">關閉</button>
+  </div>
+
+  <!-- 彈出視窗按鈕 -->
+  <div id="popup2" class="popup">
+    <h2>樂觀園戲院</h2>
+    <div>
+      <img id="popup-image2" class="popup-image2" src="" alt="彈出視窗圖片" />
+    </div>
+    <p id="popup-content2"></p>
+    <button class="close-button" onclick="closePopup2()">關閉</button>
+  </div>
+
+  <button class="popup-button" onclick="redirectToOtherPage()">彈出視窗</button>
+
+</body>
+
+</html>

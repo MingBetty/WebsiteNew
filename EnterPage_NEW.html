@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Creative Wave</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <style>
+        /* 定義選單的樣式 */
+        #menu {
+            position: fixed;
+            top: 0;
+            left: -25%;
+            width: 25%;
+            height: 100vh;
+            background-color: #f1f1f1;
+            transition: left 0.3s ease;
+            z-index: 999; /* 設置較高的疊放順序 */
+        }
+
+        /* 選單出現時的位置 */
+        #menu.open {
+            left: 0;
+        }
+
+        /* 選項樣式 */
+        .menu-option {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* 選項 hover 狀態樣式 */
+        .menu-option:hover {
+            background-color: #ccc;
+        }
+
+        /* 關閉按鈕樣式 */
+        #close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        #menu-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 30px; /* 设置图像的宽度 */
+            height: 30px; /* 设置图像的高度 */
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 style="margin-left: 10px;">Creative Wave</h1>
+        <!-- 選單圖示 -->
+        <img id="menu-icon" alt="Menu" src="menu.png" onclick="toggleMenu()">
+    </header>
+
+    <!-- 選單 -->
+    <div id="menu">
+        <div id="close-button" onclick="toggleMenu()">X</div>
+        <div class="menu-option" onclick="selectOption(1)">XR Game</div>
+        <div class="menu-option" onclick="selectOption(2)">獨立展覽</div>
+        <div class="menu-option" onclick="selectOption(3)">北頭漁村</div>
+        <div class="menu-option" onclick="selectOption(4)">計畫介紹</div>
+    </div>
+
+    <!-- Three.js 場景容器 -->
+    <div id="canvas-container">
+        <main>
+            <div id="map">
+                <div class="image-container" id="image_1">
+                    <img src="ar2.png" alt="Image 1">
+                </div>
+                <!-- 添加更多图片容器 -->
+            </div>
+
+            <div id="info">
+                <!-- Information about the points will be displayed here -->
+            </div>
+        </main>
+        <script src="script.js"></script>
+    </div>
+
+    <script src="https://threejs.org/build/three.js"></script>
+    <script src="https://www.npmjs.com/package/simplex-noise"></script>
+
+    <script>
+        var menuOpen = false;
+
+        // 切換選單開關狀態
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            var menuIcon = document.getElementById("menu");
+
+            if (menuOpen) {
+                menu.classList.remove("open");
+                menuIcon.src = "Menu.png";
+            } else {
+                menu.classList.add("open");
+                menuIcon.src = "Menu.png";
+            }
+
+            menuOpen = !menuOpen;
+        }
+
+        // 點選選項時的處理函數
+        function selectOption(option) {
+            console.log("選擇了選項 " + option);
+            // 根據選項值導航到對應的網頁
+            switch (option) {
+                case 1:
+                    window.location.href = "XRgame.html";
+                    break;
+                case 2:
+                    window.location.href = "exhib.html";
+                    break;
+                case 3:
+                    window.location.href = "MAP.html";
+                    break;
+                case 4:
+                    window.location.href = "intro.html";
+                    break;
+                default:
+                    break;
+            }
+        }
+    </script>
+
+    <script>
+        // Create a scene
+        var scene = new THREE.Scene();
+
+        // Create a camera
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // Create a renderer
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Create a geometry for the sphere
+        var sphereGeometry = new THREE.SphereGeometry(2, 10, 10);
+
+        // Create a material for the sphere
+        var sphereMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            wireframe: true,
+            linewidth: 2 // 設定線條寬度為 2
+        });
+
+        // Create the sphere
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        scene.add(sphere);
+
+        // Create a geometry for the particles
+        var particleGeometry = new THREE.BufferGeometry();
+        var particleCount = 1000;
+        var posArray = new Float32Array(particleCount * 3);
+
+        for (var i = 0; i < particleCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 5;
+        }
+
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        // Create a material for the particles
+        var particleMaterial = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.01
+        });
+
+        // Create the particle system
+        var particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+
+        // Add it to the scene
+        scene.add(particleSystem);
+
+        // Create an animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate the sphere
+            sphere.rotation.y -= 0.001;
+
+            // Move the particles
+            var positions = particleSystem.geometry.attributes.position.array;
+            var speed = 0.005; // 調整粒子的速度，你可以增加此值以加快速度
+
+            for (var i = 0; i < positions.length; i++) {
+                var offset = (Math.random() - 0.5) * speed;
+                positions[i] += offset;
+            }
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+
+        // Start the animation loop
+        animate();
+    </script>
+
+</body>
+
+</html>
